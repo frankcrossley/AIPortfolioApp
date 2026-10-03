@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { BadgeCheck, Heart, MapPin, ShieldCheck } from 'lucide-react'
 import BikeArt from './BikeArt'
@@ -32,6 +33,22 @@ export function FavouriteButton({ id, className = '' }: { id: string; className?
 }
 
 export function ListingArt({ listing, view = 0, className = '' }: { listing: Listing; view?: number; className?: string }) {
+  const [failedSrc, setFailedSrc] = useState<string>()
+  const src = listing.images?.length ? listing.images[view % listing.images.length] : undefined
+  const alt = `${listing.year} ${listing.brand} ${listing.model}`
+
+  if (src && src !== failedSrc) {
+    return (
+      <img
+        src={`${import.meta.env.BASE_URL}${src.replace(/^\//, '')}`}
+        alt={alt}
+        loading="lazy"
+        decoding="async"
+        onError={() => setFailedSrc(src)}
+        className={`object-cover ${className}`}
+      />
+    )
+  }
   return (
     <BikeArt
       category={listing.category}
@@ -39,7 +56,7 @@ export function ListingArt({ listing, view = 0, className = '' }: { listing: Lis
       accentColor={listing.accentColor}
       backdrop={listing.backdrop}
       brand={listing.brand}
-      label={`${listing.year} ${listing.brand} ${listing.model}`}
+      label={alt}
       view={view}
       className={className}
     />

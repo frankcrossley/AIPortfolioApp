@@ -29,6 +29,8 @@ export interface Listing {
   accentColor: string
   backdrop: 'wall' | 'studio' | 'night' | 'concrete'
   photos: number
+  /** Real photo paths (relative to /public). When absent, an SVG render is shown instead. */
+  images?: string[]
   postedDaysAgo: number
   views: number
   seller: Seller
